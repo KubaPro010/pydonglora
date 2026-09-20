@@ -254,4 +254,4 @@ class Donglora(DongloraBase):
                 self._send(Command.TX, data, callback)
             elif packet.result == 2:  # Cancelled
                 return
-        self._send(Command.TX, data, callback, 1)
+        self._send(Command.TX, data, callback)
