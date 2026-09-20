@@ -1,7 +1,7 @@
 from enum import IntEnum, StrEnum
 from dataclasses import dataclass
 import struct
-from donglora.helper import crc16
+from pydonglora.helper import crc16
 
 class Keep: ...
 class Discard(Exception): ...

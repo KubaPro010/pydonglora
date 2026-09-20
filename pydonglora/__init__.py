@@ -1,1 +1,1 @@
-from donglora.donglora import Donglora, DongloraError
+from pydonglora.donglora import Donglora, DongloraError

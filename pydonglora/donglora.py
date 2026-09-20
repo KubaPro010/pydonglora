@@ -1,7 +1,7 @@
 import serial, time, random
 from typing import Callable, overload, Literal, Any
-from donglora.data import *
-from donglora.helper import *
+from pydonglora.data import *
+from pydonglora.helper import *
 
 Callback = Callable[..., None | type[Keep]]
 
