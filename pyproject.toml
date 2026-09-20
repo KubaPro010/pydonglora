@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pydonglora"
+version = "1.0.0"
+description = "Implementation of the Donglora protocol for LoRa over USB"
+requires-python = ">=3.14"
+authors = [
+    {name = "KubaPro010"}
+]
+
+[tool.setuptools.packages.find]
+include = ["donglora*"]
