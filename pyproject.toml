@@ -12,4 +12,4 @@ authors = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["donglora*"]
+include = ["pydonglora*"]
