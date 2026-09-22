@@ -91,6 +91,7 @@ class Donglora(DongloraBase):
         self._iq_invert: bool | None = None
         self._info: DongloraDeviceInfo | None = None
         self._configured: bool = False
+        self._transmitting: bool = False
         self._get_info()
     def meshtastic(self) -> Donglora:
         # LongFast preset
@@ -238,7 +239,10 @@ class Donglora(DongloraBase):
         self._send(Command.RX_STOP, b"")
         return self
 
-    def transmit(self, data: bytes, skip_cad: bool = False):
+    def transmit(self, data: bytes, skip_cad: bool = False, blocking: bool = False):
+        while self._transmitting and blocking: self.loop()
+        if self._transmitting: raise AlreadyTransmitting # Allow one transmission sent to device - some can handle more but my test one doesn't (RP2040)
+
         assert self._configured
         if len(data) > self.device_info.max_payload_bytes: raise ValueError("payload too long")
 
@@ -248,10 +252,14 @@ class Donglora(DongloraBase):
             if isinstance(packet, DongloraPacket): return Keep
 
             if packet.result == 0:
+                self._transmitting = False
                 return
             elif packet.result == 1:  # Channel busy
-                time.sleep(random.random() * 50)
+                time.sleep(random.random() * 5)
                 self._send(Command.TX, data, callback)
             elif packet.result == 2:  # Cancelled
+                self._transmitting = False
                 return
+        self._transmitting = True
         self._send(Command.TX, data, callback)
+        while self._transmitting: self.loop()
