@@ -1,4 +1,4 @@
-import serial, time, random
+import serial, time, random, math
 from typing import Callable, overload, Literal, Any
 from pydonglora.data import *
 from pydonglora.helper import *
@@ -263,3 +263,18 @@ class Donglora(DongloraBase):
         self._transmitting = True
         self._send(Command.TX, data, callback)
         while self._transmitting: self.loop()
+
+    def estimateTimeOnAir(self, data_len: int):
+        if not self._sf or not self._cr or not self._bw: raise Exception
+        bit_crc = 16 if self._crc_on else 0
+        symbol_header = 0 if self._header_mode else 20
+
+        sfbw = (2**self._sf) / LoRaBandwidth_KHz_Map[self._bw]
+        ldro = sfbw > 16 # Donglora setting
+        if self._sf in [5, 6]:
+            n_symbol = (self.preamble_len or 0) + 6.25 + 8 + math.ceil(max(8*data_len+bit_crc-4*self._sf+symbol_header,0) / (4 * self._sf)) * (self._cr + 5)
+        elif ldro:
+            n_symbol = (self.preamble_len or 0) + 4.25 + 8 + math.ceil(max(8*data_len+bit_crc-4*self._sf+8+symbol_header,0) / (4 * (self._sf-2))) * (self._cr + 5)
+        else:
+            n_symbol = (self.preamble_len or 0) + 4.25 + 8 + math.ceil(max(8*data_len+bit_crc-4*self._sf+8+symbol_header,0) / (4 * self._sf)) * (self._cr + 5)
+        return sfbw * n_symbol

@@ -35,6 +35,21 @@ class LoRaBandwidth(IntEnum):
     KHz_15 = 2
     KHz_10 = 1
     KHz_7 = 0
+LoRaBandwidth_KHz_Map = {
+    LoRaBandwidth.KHz_1600: 1600,
+    LoRaBandwidth.KHz_800: 800,
+    LoRaBandwidth.KHz_500: 500,
+    LoRaBandwidth.KHz_400: 400,
+    LoRaBandwidth.KHz_250: 250,
+    LoRaBandwidth.KHz_125: 125,
+    LoRaBandwidth.KHz_62: 62.5,
+    LoRaBandwidth.KHz_41: 41.67,
+    LoRaBandwidth.KHz_31: 31.25,
+    LoRaBandwidth.KHz_20: 20.83,
+    LoRaBandwidth.KHz_15: 15.63,
+    LoRaBandwidth.KHz_10: 10.42,
+    LoRaBandwidth.KHz_7: 7.81,
+}
 class LoRaCodingRate(IntEnum):
     CR_4_5 = 0
     CR_4_6 = 1
